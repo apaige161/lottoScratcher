@@ -37,6 +37,46 @@ pricesArray = wait.until(EC.presence_of_all_elements_located((By.CLASS_NAME, "kl
 for prices in pricesArray:
     print(prices.text)
 
+# Get all tickets
+tickets = driver.find_elements(By.XPATH, '//*[@id="snapContent"]/div[5]/div/div/div/div[2]/div[3]/div[2]/div[2]/ul/li/a')
+for ticket in tickets:
+    print(ticket.text)
+
+    # Click on each ticket
+    ticket = driver.find_element(By.LINK_TEXT, ticket.text)
+
+    # Wait for page to load 
+    table = wait.until(EC.presence_of_element_located((By.CLASS_NAME, 'panel-body')))
+
+    # Get name
+    ticketName = driver.find_element(By.XPATH, '//*[@id="snapContent"]/div[5]/div/div/div/div/div[4]/div/h2')
+    print(ticketName.text)
+
+    # Get Value
+    value = driver.find_element(By.XPATH, '//*[@id="snapContent"]/div[5]/div/div/div/div/div[4]/div/div/div[1]/div[2]/div[1]/b[4]')
+
+    # Get Top Prize
+
+    # Get Overall Odds
+    odds = driver.find_element(By.XPATH, '//*[@id="snapContent"]/div[5]/div/div/div/div/div[4]/div/div/div[1]/div[2]/div[1]/b[6]')
+
+    # Get Game #
+    gameNum = driver.find_element(By.XPATH, '//*[@id="snapContent"]/div[5]/div/div/div/div/div[4]/div/div/div[1]/div[2]/div[1]/b[7]')
+
+    # Remove "- number" 
+    splitTicket = ticketName.text.split(" ", 1)
+    pureTicketName = splitTicket[0]
+
+
+    print("Name: " + pureTicketName)
+    print("Value: " + value)
+    print("Ticket Number: " + gameNum)
+    print("Odds: " + odds)
+
+
+
+    # Get table data
+    input()
 
 
 
