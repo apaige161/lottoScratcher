@@ -17,12 +17,10 @@ options = webdriver.ChromeOptions()
 PATH = "C:\Program Files (x86)\chromedriver.exe"
 driver = webdriver.Chrome(PATH)
 
-weatherWebsite = "https://weather.com/"
-lotteryWebsite = "https://www.kylottery.com/apps/scratch_offs/prizes_remaining.html"
-kyFishAndWildlife = "https://fw.ky.gov/Pages/default.aspx"
+KYlotteryWebsite = "https://www.kylottery.com/apps/scratch_offs/prizes_remaining.html"
 
 # Open website and sort by price
-driver.get(lotteryWebsite)
+driver.get(KYlotteryWebsite)
 # Wait for item to be clickable
 wait = WebDriverWait(driver, 10, poll_frequency=1, ignored_exceptions=[ElementNotVisibleException, ElementNotSelectableException])
 # Select "Price" in the dropdown to sort items 
