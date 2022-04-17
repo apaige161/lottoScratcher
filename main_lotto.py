@@ -98,7 +98,7 @@ for ticket in ticketNameArr :
     gameNum = driver.find_element(By.XPATH, './/b[7]')
 
     # Remove "- number" 
-    splitTicket = str(ticketName.text).split(" ", 1)
+    splitTicket = str(ticketName.text).split(" -", 1)
     pureTicketName = splitTicket[0]
 
     print("")
