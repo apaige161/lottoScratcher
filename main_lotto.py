@@ -2,6 +2,7 @@
 # scrape "https://www.kylottery.com/apps/scratch_offs/prizes_remaining.html"
 
 from pydoc import classname
+from re import I
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
@@ -37,9 +38,105 @@ pricesArray = wait.until(EC.presence_of_all_elements_located((By.CLASS_NAME, "kl
 for prices in pricesArray:
     print(prices.text)
 
+# Get all ticket names
+tickets = driver.find_elements(By.XPATH, '//*[@id="snapContent"]/div[5]/div/div/div/div[2]/div[3]/div[2]/div[2]/ul/li/a')
+
+ticketNameArr = []
+
+for ticket in tickets:
+    #add ticket text only to new array
+    ticketNameArr.append(ticket.text)
+print("Number of tickets found: " + str(len(tickets)))
+
+print("inside ticket name array")
+for ticket in ticketNameArr:
+    print("Ticket Name: " + ticket)
+print("end ticket name array")
+
+pressGoButton = False
+i = 0
+ticketText = ""
+for ticket in ticketNameArr :
+
+    print("start loop iteration")
+    ticketText = ticketNameArr[i]
+    print(ticketNameArr[1])
+    print(ticketNameArr[2])
+    print(ticketNameArr[i+3])
+    print("TICKETTEXT:" + ticketText)
+    print("index: " + str(i))
+
+    # dont do this on the first loop
+    # select and press go button
+    
+    print("pressGoButton is True")
+    dropDownPriceOption = wait.until(EC.presence_of_element_located((By.XPATH, '//*[@id="snapContent"]/div[5]/div/div/div/div[2]/div[3]/div[2]/div[1]/div[2]/div/div[1]/select/option[4]')))
+    dropDownPriceOption.click()
+    print("Page Loaded Successfully")
+    goButton = wait.until(EC.presence_of_element_located((By.XPATH, '//*[@id="snapContent"]/div[5]/div/div/div/div[2]/div[3]/div[2]/div[1]/div[2]/div/div[2]/div/div')))
+    goButton.click()
 
 
 
+    print("")
+    
+    print(ticketText)
+    
+
+    print("- ticket searched -")
+    print(ticketText)
+
+
+    # Click on each ticket
+    ticketLink = driver.find_element(By.LINK_TEXT, ticketText)
+    ticketLink.click()
+    # Wait for page to load 
+    table = wait.until(EC.presence_of_element_located((By.CLASS_NAME, 'panel-body')))
+
+    basicInfoDiv = driver.find_element(By.XPATH, '//*[@id="snapContent"]/div[5]/div/div/div/div/div[4]/div/div/div[1]/div[2]/div[1]')
+
+    # remainingPrizeTableDiv = driver.find_element(By.XPATH, '//*[@id="snapContent"]/div[5]/div/div/div/div/div[4]/div/div/div[1]/div[2]/div[2]')
+    # Get table data
+    # Get Top Prize
+
+
+    # Get name
+    ticketName = driver.find_element(By.XPATH, '//*[@id="snapContent"]/div[5]/div/div/div/div/div[4]/div/h2')
+    # ticketName = tickets[i].text
+    print(ticketName.text)
+
+    # Get Value
+    value = basicInfoDiv.find_element(By.XPATH, './/b[4]')
+
+    
+    # Get Overall Odds
+    odds = driver.find_element(By.XPATH, './/b[6]')
+
+    # Get Game #
+    gameNum = driver.find_element(By.XPATH, './/b[7]')
+
+    # Remove "- number" 
+    splitTicket = str(ticketName.text).split(" ", 1)
+    pureTicketName = splitTicket[0]
+
+    print("")
+    print("")
+    print("Name: " + str(pureTicketName) )
+    print("Value: " + str(value.text))
+    print("Ticket Number: " + str(gameNum.text))
+    print("Odds: " + str(odds.text))
+    print("")
+    print("")
+
+    i = i + 1
+    driver.back()
+    pressGoButton = True
+    time.sleep(4)
+
+    
+
+input()
+print("Completed Scrape!")
 
 # close browser
 #driver.quit() 
