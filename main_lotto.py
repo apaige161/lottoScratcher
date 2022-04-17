@@ -52,40 +52,22 @@ print("inside ticket name array")
 for ticket in ticketNameArr:
     print("Ticket Name: " + ticket)
 print("end ticket name array")
-
+print("start loop iteration")
 pressGoButton = False
 i = 0
 ticketText = ""
 for ticket in ticketNameArr :
 
-    print("start loop iteration")
-    ticketText = ticketNameArr[i]
-    print(ticketNameArr[1])
-    print(ticketNameArr[2])
-    print(ticketNameArr[i+3])
-    print("TICKETTEXT:" + ticketText)
-    print("index: " + str(i))
-
-    # dont do this on the first loop
-    # select and press go button
+    ticketText = ticket
+    # print("TICKET TEXT: " + ticketText)
     
-    print("pressGoButton is True")
+
+    # select and press go button
     dropDownPriceOption = wait.until(EC.presence_of_element_located((By.XPATH, '//*[@id="snapContent"]/div[5]/div/div/div/div[2]/div[3]/div[2]/div[1]/div[2]/div/div[1]/select/option[4]')))
     dropDownPriceOption.click()
-    print("Page Loaded Successfully")
+    # print("Page Loaded Successfully")
     goButton = wait.until(EC.presence_of_element_located((By.XPATH, '//*[@id="snapContent"]/div[5]/div/div/div/div[2]/div[3]/div[2]/div[1]/div[2]/div/div[2]/div/div')))
     goButton.click()
-
-
-
-    print("")
-    
-    print(ticketText)
-    
-
-    print("- ticket searched -")
-    print(ticketText)
-
 
     # Click on each ticket
     ticketLink = driver.find_element(By.LINK_TEXT, ticketText)
@@ -103,7 +85,7 @@ for ticket in ticketNameArr :
     # Get name
     ticketName = driver.find_element(By.XPATH, '//*[@id="snapContent"]/div[5]/div/div/div/div/div[4]/div/h2')
     # ticketName = tickets[i].text
-    print(ticketName.text)
+    # print(ticketName.text)
 
     # Get Value
     value = basicInfoDiv.find_element(By.XPATH, './/b[4]')
@@ -121,7 +103,9 @@ for ticket in ticketNameArr :
 
     print("")
     print("")
-    print("Name: " + str(pureTicketName) )
+    print("index: " + str(i))
+    print("Full Name: " + ticket)
+    print("Adjusted Name: " + str(pureTicketName) )
     print("Value: " + str(value.text))
     print("Ticket Number: " + str(gameNum.text))
     print("Odds: " + str(odds.text))
