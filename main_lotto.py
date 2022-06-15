@@ -1,6 +1,7 @@
 
 # scrape "https://www.kylottery.com/apps/scratch_offs/prizes_remaining.html"
 
+from fileinput import filename
 from pydoc import classname
 from re import I
 from selenium import webdriver
@@ -12,13 +13,21 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import ElementNotVisibleException, ElementNotSelectableException
 import time
+from ticketClass import Ticket
+from ticketClass import createTicket
+from os import path
+import csv
+
+
+start_time = time.time()
+
 
 # setup
 options = webdriver.ChromeOptions()
-PATH = "C:\Program Files (x86)\chromedriver.exe"
+PATH = "C:/Program Files (x86)/chromedriver.exe"
 driver = webdriver.Chrome(PATH)
-
-KYlotteryWebsite = "https://www.kylottery.com/apps/scratch_offs/prizes_remaining.html"
+JSON_file = "./ticketData.json"
+KYlotteryWebsite = 'https://www.kylottery.com/apps/scratch_offs/prizes_remaining.html'
 
 # Open website and sort by price
 driver.get(KYlotteryWebsite)
@@ -53,24 +62,24 @@ for ticket in ticketNameArr:
     print("Ticket Name: " + ticket)
 print("end ticket name array")
 print("start loop iteration")
-pressGoButton = False
+
+
+allTicketObjs = []
+
 i = 0
-ticketText = ""
+totalTickets = len(ticketNameArr)
+
+
 for ticket in ticketNameArr :
 
-    ticketText = ticket
-    # print("TICKET TEXT: " + ticketText)
-    
-
-    # select and press go button
+    # select dropdown and press go button
     dropDownPriceOption = wait.until(EC.presence_of_element_located((By.XPATH, '//*[@id="snapContent"]/div[5]/div/div/div/div[2]/div[3]/div[2]/div[1]/div[2]/div/div[1]/select/option[4]')))
     dropDownPriceOption.click()
-    # print("Page Loaded Successfully")
     goButton = wait.until(EC.presence_of_element_located((By.XPATH, '//*[@id="snapContent"]/div[5]/div/div/div/div[2]/div[3]/div[2]/div[1]/div[2]/div/div[2]/div/div')))
     goButton.click()
 
     # Click on each ticket
-    ticketLink = driver.find_element(By.LINK_TEXT, ticketText)
+    ticketLink = driver.find_element(By.LINK_TEXT, ticket)
     ticketLink.click()
     # Wait for page to load 
     table = wait.until(EC.presence_of_element_located((By.CLASS_NAME, 'panel-body')))
@@ -84,43 +93,60 @@ for ticket in ticketNameArr :
 
     # Get name
     ticketName = driver.find_element(By.XPATH, '//*[@id="snapContent"]/div[5]/div/div/div/div/div[4]/div/h2')
-    # ticketName = tickets[i].text
-    # print(ticketName.text)
-
     # Get Value
     value = basicInfoDiv.find_element(By.XPATH, './/b[4]')
-
-    
     # Get Overall Odds
-    odds = driver.find_element(By.XPATH, './/b[6]')
-
+    odds = basicInfoDiv.find_element(By.XPATH, './/b[6]')
     # Get Game #
-    gameNum = driver.find_element(By.XPATH, './/b[7]')
-
+    gameNum = basicInfoDiv.find_element(By.XPATH, './/b[7]')
     # Remove "- number" 
     splitTicket = str(ticketName.text).split(" -", 1)
     pureTicketName = splitTicket[0]
 
-    print("")
-    print("")
-    print("index: " + str(i))
-    print("Full Name: " + ticket)
-    print("Adjusted Name: " + str(pureTicketName) )
-    print("Value: " + str(value.text))
-    print("Ticket Number: " + str(gameNum.text))
-    print("Odds: " + str(odds.text))
-    print("")
-    print("")
+    print()
+    print('Ticket Name: ' + pureTicketName)
+    print('Ticket Value: '+ value.text) 
+    print('Ticket Odds: ' + odds.text)
+    print('Ticket Number: ' + gameNum.text)
+
+    singleTicket = createTicket(i, value.text, pureTicketName, odds.text, gameNum.text)
+    allTicketObjs.append(singleTicket)
+
+
+    print('(' + str(i+1) + '/' + str(totalTickets) +') Tickets Scrapped')
+    
 
     i = i + 1
     driver.back()
-    pressGoButton = True
     time.sleep(4)
+
+
+print()
+print("Completed Scrape!")
+print("All Objects:")
+print()
+
+for ticket in allTicketObjs :
+    print(ticket.ticketName + ' ' + ticket.value + ' ' + ticket.odds)
+
+
+
+header = ['ID', 'Value', 'Name', 'Odds', 'TicketNumber']
+with open('tickets.csv', 'w') as f:
+    # create the csv writer
+    writer = csv.writer(f)
+
+    writer.writerow(header)
+
+    for ticket in allTicketObjs :
+        ticketArr = [ ticket.id, ticket.value, ticket.ticketName, ticket.odds, ticket.ticketNumber ]
+        writer.writerow(ticketArr)
+        # writer.writerow(ticket.ticketName + ' ' + ticket.value + ' ' + ticket.odds)
 
     
 
-input()
-print("Completed Scrape!")
+
+print("--- %s seconds ---" % (time.time() - start_time))
 
 # close browser
-#driver.quit() 
+driver.quit() 
