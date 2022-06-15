@@ -16,6 +16,7 @@ import time
 from ticketClass import Ticket
 from ticketClass import createTicket
 from os import path
+import csv
 
 
 start_time = time.time()
@@ -126,6 +127,22 @@ print()
 
 for ticket in allTicketObjs :
     print(ticket.ticketName + ' ' + ticket.value + ' ' + ticket.odds)
+
+
+
+header = ['ID', 'Value', 'Name', 'Odds', 'TicketNumber']
+with open('tickets.csv', 'w') as f:
+    # create the csv writer
+    writer = csv.writer(f)
+
+    writer.writerow(header)
+
+    for ticket in allTicketObjs :
+        ticketArr = [ ticket.id, ticket.value, ticket.ticketName, ticket.odds, ticket.ticketNumber ]
+        writer.writerow(ticketArr)
+        # writer.writerow(ticket.ticketName + ' ' + ticket.value + ' ' + ticket.odds)
+
+    
 
 
 print("--- %s seconds ---" % (time.time() - start_time))
