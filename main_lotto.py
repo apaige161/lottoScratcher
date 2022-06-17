@@ -13,10 +13,15 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import ElementNotVisibleException, ElementNotSelectableException
 import time
+from convertTicketOddsToPercentage import convertTicketOddsToPercentage
+from sortByOdds import sortTicketsBy
 from ticketClass import Ticket
 from ticketClass import createTicket
 from os import path
 import csv
+
+from writeToCsv import writeToCsv
+
 
 
 start_time = time.time()
@@ -65,11 +70,9 @@ print("start loop iteration")
 
 
 allTicketObjs = []
-
-i = 0
 totalTickets = len(ticketNameArr)
 
-
+i = 0
 for ticket in ticketNameArr :
 
     # select dropdown and press go button
@@ -120,29 +123,25 @@ for ticket in ticketNameArr :
     driver.back()
     time.sleep(4)
 
+
+
+
 print()
 print("Completed Scrape!")
 print("All Objects:")
 print()
 
-for ticket in allTicketObjs :
-    print(ticket.ticketName + ' ' + ticket.value + ' ' + ticket.odds)
+############### Unsorted ###############
+# get odds in percentage
+convertTicketOddsToPercentage(allTicketObjs)
+# write unsorted to tickets.csv
+writeToCsv('tickets.csv', allTicketObjs)
 
-
-
-header = ['ID', 'Value', 'Name', 'Odds', 'TicketNumber']
-with open('tickets.csv', 'w') as f:
-    # create the csv writer
-    writer = csv.writer(f)
-
-    writer.writerow(header)
-
-    for ticket in allTicketObjs :
-        ticketArr = [ ticket.id, ticket.value, ticket.ticketName, ticket.odds, ticket.ticketNumber ]
-        writer.writerow(ticketArr)
-        # writer.writerow(ticket.ticketName + ' ' + ticket.value + ' ' + ticket.odds)
-
-    
+############### Sorted ###############
+#sort arr of objects
+sortTicketsBy(allTicketObjs, 'odds')
+# write sorted to tickets.csv
+writeToCsv('SortedTickets.csv', allTicketObjs)
 
 
 print("--- %s seconds ---" % (time.time() - start_time))
