@@ -4,7 +4,7 @@ import csv
 import string
 
 
-def writeToCsv(fileName: string, listOfTickets: list) :
+def writeToCsv(fileName: string, listOfTickets: list, fomattedToPercentage: bool) :
     header = ['ID', 'Value', 'Name', 'Odds', 'TicketNumber']
 
     with open(fileName, 'w') as f:
@@ -13,12 +13,10 @@ def writeToCsv(fileName: string, listOfTickets: list) :
         writer.writerow(header)
 
         for ticket in listOfTickets :
-            # splitNumber = (ticket.odds).split(':', 1)
-            # stringNumberToDivideBy = splitNumber[1]
-            # #convert to float, get percentage, format string for file write
-            # numberToDivideBy = float(stringNumberToDivideBy)
-            # floatOdds = (1 / numberToDivideBy) * 100
-            ticketOdds = format(ticket.odds, '.2f') + '%'
+            if fomattedToPercentage :
+                ticketOdds = format(ticket.odds, '.2f') + '%'
+            else :
+                ticketOdds = ticket.odds
             ticketArr = [ ticket.id, ticket.value, ticket.ticketName, ticketOdds, ticket.ticketNumber ]
             # write to csv
             writer.writerow(ticketArr)

@@ -1,9 +1,10 @@
 ### Installing
 install python 3.10+
 install pip
-> pip install -r requirements.txt 
+open a terminal and run:
+    pip install -r requirements.txt 
 
-install chrome webbrowser
+install chrome web driver (make sure it matches your version of chrome)
 save here: "C:\Program Files (x86)\chromedriver.exe"
 
 #### Tutorials
