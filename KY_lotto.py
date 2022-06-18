@@ -1,20 +1,9 @@
 
 # scrape "https://www.kylottery.com/apps/scratch_offs/prizes_remaining.html"
 
-# from fileinput import filename
-# from pydoc import classname
-# from re import I
-# from selenium import webdriver
-# from selenium.webdriver.common.keys import Keys
-# from selenium.webdriver.common.by import By
-# from selenium.webdriver import ActionChains
-# from selenium.webdriver.support.ui import Select
-# from selenium.webdriver.support.ui import WebDriverWait
-# from selenium.webdriver.support import expected_conditions as EC
-# from selenium.common.exceptions import ElementNotVisibleException, ElementNotSelectableException
 import time
 from convertTicketOddsToPercentage import convertTicketOddsToPercentage
-from kyHelperFunctions import *
+from KY.kyHelperFunctions import *
 from sortByOdds import sortTicketsBy
 from writeToCsv import writeToCsv
 
@@ -69,7 +58,7 @@ print()
 
 ############### Unsorted ###############
 # write unsorted to tickets.csv
-writeToCsv('tickets.csv', allTicketObjs, False)
+writeToCsv('CSVs/KYtickets.csv', allTicketObjs, False)
 
 ############### Sorted ###############
 # sort arr of objects
@@ -77,7 +66,7 @@ sortTicketsBy(allTicketObjs, 'odds')
 # get odds in percentage
 convertTicketOddsToPercentage(allTicketObjs)
 # write sorted to tickets.csv
-writeToCsv('SortedTickets.csv', allTicketObjs, True)
+writeToCsv('CSVs/KySortedTickets.csv', allTicketObjs, True)
 
 print("--- %s seconds ---" % (time.time() - start_time))
 
