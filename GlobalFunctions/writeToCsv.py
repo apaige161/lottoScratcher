@@ -18,5 +18,6 @@ def writeToCsv(fileName: string, listOfTickets: list, fomattedToPercentage: bool
             else :
                 ticketOdds = ticket.odds
             ticketArr = [ ticket.id, ticket.value, ticket.ticketName, ticketOdds, ticket.ticketNumber ]
+            print(ticketArr)
             # write to csv
             writer.writerow(ticketArr)

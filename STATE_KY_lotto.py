@@ -2,15 +2,14 @@
 # scrape "https://www.kylottery.com/apps/scratch_offs/prizes_remaining.html"
 
 import time
-from convertTicketOddsToPercentage import convertTicketOddsToPercentage
+from GlobalFunctions.convertTicketOddsToPercentage import convertTicketOddsToPercentage
 from KY.kyHelperFunctions import *
-from sortByOdds import sortTicketsBy
-from writeToCsv import writeToCsv
+from GlobalFunctions.sortByOdds import sortTicketsBy
+from GlobalFunctions.writeToCsv import writeToCsv
 
 ############### Setup ###############
 start_time = time.time()
 DRIVER
-JSON_file = "./ticketData.json"
 # Load website
 KYsetup()
 # Wait for item to be clickable then go to page for data collection
